@@ -24,3 +24,4 @@ def calculate_stats(rows: list[dict]) -> dict:
         return {'samples': n, 'successful': len(successes),
             'observed_success_pct': round(100 * len(successes) / n, 2) if n else None,
             'avg_tcp_connect_ms': round(sum(latencies) / len(latencies), 2) if latencies else None}
+
