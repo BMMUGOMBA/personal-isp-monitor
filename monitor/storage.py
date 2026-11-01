@@ -7,10 +7,26 @@ def initialize(path: str ) -> None:
     with closing(sqlite3.connect(path)) as conn:
         conn.executescript(SCHEMA)
 
+
 def insert(path: str, record: dict) -> None:
     with closing(sqlite3.connect(path)) as conn:
-        conn.execute('INSERT INTO measurements(timestamp,host,port,ok,connect_ms,error) VALUES (?,?,?,?,?,?)',
-                     (record['timestamp'],record['host'],record['port'],int(record['ok']),record['connect_ms'],record['error']))
+        conn.execute(
+            '''
+            INSERT INTO measurements
+            (timestamp, host, port, ok, connect_ms, error)
+            VALUES (?, ?, ?, ?, ?, ?)
+            ''',
+            (
+                record['timestamp'],
+                record['host'],
+                record['port'],
+                int(record['ok']),
+                record['connect_ms'],
+                record['error']
+            )
+        )
+        conn.commit()
+
 
 def latest(path: str, limit: int = 100) -> list[dict]:
     with closing(sqlite3.connect(path)) as conn:
